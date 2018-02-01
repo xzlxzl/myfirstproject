@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://cxf.apache.org/jaxws   
+        http://cxf.apache.org/schemas/jaxws.xsd
+        http://cxf.apache.org/jaxrs 
+        http://cxf.apache.org/schemas/jaxrs.xsd 
+        ">
+	<context:component-scan base-package="com.swd.webservice.service">
+		<!-- 扫描包下@Service注解的文件 -->
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Service" />
+	</context:component-scan>
+	<!-- spring容器管理工具 -->
+	 <bean id="springContextUtil" class="com.swd.webservice.common.utils.SpringContextUtil"/> 
+	<!-- 占位符配置信息 -->
+	 <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:jdbc.properties</value>
+				<!-- <value>classpath:redis.properties</value>
+				<value>classpath:email.properties</value> -->
+			</list>
+		</property>
+		<property name="ignoreUnresolvablePlaceholders" value="true" /> 
+	</bean> 
+    <!-- jax-ws endpoint定义  -->  
+    
+     <!--  <jaxws:endpoint id="userServiceep" implementor="#userServiceimpl" address="/UserService" /> -->
+       <!--  <jaxws:server address="/UserService" serviceClass="com.swd.webservice.service.UserService">
+		服务接口的实现类
+		<jaxws:serviceBean>
+			<bean class="com.swd.webservice.service.impl.UserServiceImpl"></bean>
+		</jaxws:serviceBean>
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor"></bean>
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"></bean>
+		</jaxws:outInterceptors> 
+	</jaxws:server>  --> 
+	<!-- <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>   -->
+	
+	   <!--  <jaxrs:server address="/userRestService">
+            <jaxrs:serviceBeans>
+                <ref bean="userRestServiceI" />
+            </jaxrs:serviceBeans>
+             <jaxrs:inInterceptors>
+                <bean class="org.apache.cxf.interceptor.LoggingInInterceptor"></bean>
+            </jaxrs:inInterceptors>
+             <jaxrs:providers>    
+                 <ref bean="jsonProvider" />    
+             </jaxrs:providers>  
+            <jaxrs:outInterceptors>
+                <bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"></bean>
+            </jaxrs:outInterceptors> 
+        </jaxrs:server>   -->
+         <jaxrs:server address="/material">
+      <jaxrs:serviceBeans>
+        <ref bean="userRestServiceI" />
+      </jaxrs:serviceBeans>
+    </jaxrs:server> 
+      <bean id="userRestServiceI" class="com.swd.webservice.service.impl.UserServiceImpl" /> 
+     <import resource="dbContext.xml" /> 
+	<!-- 引入同文件夹下的redis属性配置文件 -->
+   <!--  <import resource="redis-context.xml"/>
+    <import resource="email-context.xml"/> -->
+</beans>
